@@ -34,7 +34,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body className="font-josefin ">
-        <div className="min-h-screen">
+        <div className="min-h-screen mb-12">
           <Gutter size="lg" className="mt-[33px] flex gap-4 justify-between">
             <Link to="/">
               <h1 className="font-josefin text-4xl sm:text-6xl max-w-[11em] uppercase font-normal">
