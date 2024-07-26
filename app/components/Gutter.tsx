@@ -25,11 +25,9 @@ const Gutter: React.FC<GutterProps> = ({
         {
           "w-full": !disable,
           "mx-auto": !disable && center,
-          "max-w-[min(1280px,94vw)] xl:max-w-[min(1280px,90vw)]":
-            !disable && size === "md",
-          "max-w-[min(970px,94vw)] xl:max-w-[min(970px,90vw)]":
-            !disable && size === "sm",
-          "px-[3vw] xl:px-[5vw]": !disable && size === "lg",
+          "max-w-[min(970px,90vw)]": !disable && size === "sm",
+          "max-w-[min(1024px,90vw)]": !disable && size === "md",
+          "max-w-[min(1380px,90vw)]": !disable && size === "lg",
           "sm:pr-35 xs:pr-18": !disableNavSpacing,
         },
         className
