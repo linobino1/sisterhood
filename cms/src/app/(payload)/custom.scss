@@ -1,0 +1,26 @@
+/* sort groups in sidebar */
+.nav__controls {
+  order: 100;
+}
+.nav-group {
+  &.Configuration {
+    order: 3;
+  }
+  &.Pages {
+    order: 1;
+  }
+  &.Media {
+    order: 2;
+  }
+}
+
+/* sort groups in dashboard */
+.dashboard__group:nth-child(1) {
+  order: 3;
+}
+.dashboard__group:nth-child(2) {
+  order: 2;
+}
+.dashboard__group:nth-child(3) {
+  order: 1;
+}
