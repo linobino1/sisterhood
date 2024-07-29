@@ -118,7 +118,9 @@ export function Serialize({
           case "paragraph": {
             return (
               <Gutter disable={disableGutter} className={className} key={index}>
-                <p className="mb-3 max-w-[700px]">{serializedChildren}</p>
+                <p className="my-3 max-w-[700px] leading-snug">
+                  {serializedChildren}
+                </p>
               </Gutter>
             );
           }

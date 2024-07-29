@@ -79,7 +79,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             </Link>
             <Navigation className="max-sm:hidden text-2xl" />
           </Gutter>
-          <main className="mt-12">{children}</main>
+          <main className="mt-6 sm:mt-12">{children}</main>
         </div>
         <footer className="sm:hidden my-8 text-sm">
           <Gutter>
