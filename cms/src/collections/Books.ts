@@ -1,4 +1,5 @@
 import { slugField } from '@/fields/slug'
+import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { CollectionConfig } from 'payload'
 
 export const Books: CollectionConfig = {
@@ -37,6 +38,10 @@ export const Books: CollectionConfig = {
       admin: {
         description: 'A short text about the book for the books list',
       },
+      editor: lexicalEditor({
+        features: ({ defaultFeatures }) =>
+          defaultFeatures.filter((feature) => feature.key !== 'link'),
+      }),
     },
     {
       name: 'image',

@@ -1,5 +1,5 @@
 import { json, LoaderFunctionArgs } from "@remix-run/node";
-import { Link, NavLink, useLoaderData } from "@remix-run/react";
+import { Link, NavLink, useLoaderData, useNavigate } from "@remix-run/react";
 import Gutter from "~/components/Gutter";
 import BooksQuery from "~/gql/BooksQuery";
 import LexicalContent from "~/lexical/LexicalContent";
@@ -22,6 +22,7 @@ export const loader = async ({}: LoaderFunctionArgs) => {
 
 export default function Books() {
   const { books } = useLoaderData<typeof loader>();
+  const navigate = useNavigate();
   return (
     <Gutter size="lg">
       <h1 className="text-2xl">Books already travelling</h1>
@@ -32,7 +33,15 @@ export default function Books() {
         >
           <ReactMasonry gutter="clamp(20px, (100vw - 1000px) * 99, 50px)">
             {books?.map((book, index) => (
-              <div key={index} className="">
+              <div
+                key={index}
+                onClick={() => {
+                  if (book?.article) {
+                    navigate(`/books/${book.slug}`);
+                  }
+                }}
+                className={cn({ "cursor-pointer": book?.article })}
+              >
                 {book?.image.url ? (
                   <img
                     src={book.image.url}
