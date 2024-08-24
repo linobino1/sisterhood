@@ -22,7 +22,7 @@ export default function Index() {
   const { content } = useLoaderData<typeof loader>();
   return (
     <Gutter size="lg">
-      <LexicalContent json={content} className="text-xl" disableGutter />;
+      <LexicalContent json={content} className="text-xl" disableGutter />
     </Gutter>
   );
 }
