@@ -25,8 +25,11 @@ export default function Index() {
   const containerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
 
-  // let's limit the container height by the content height
+  // let's limit the container height by the content height (desktop only)
   useEffect(() => {
+    if (window.innerWidth < 700) {
+      return;
+    }
     if (containerRef.current && contentRef.current) {
       containerRef.current.style.maxHeight = `${contentRef.current.clientHeight}px`;
     }
