@@ -1,11 +1,12 @@
 import { json, LoaderFunctionArgs } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
+import { Link, NavLink, useLoaderData } from "@remix-run/react";
 import Gutter from "~/components/Gutter";
 import BooksQuery from "~/gql/BooksQuery";
 import LexicalContent from "~/lexical/LexicalContent";
 import { errors } from "~/util/errors";
 import { gqlClient } from "~/util/gqlClient";
 import ReactMasonry, { ResponsiveMasonry } from "react-responsive-masonry";
+import { cn } from "~/util/cn";
 
 export const loader = async ({}: LoaderFunctionArgs) => {
   const res = await gqlClient().query(BooksQuery, {});
@@ -52,12 +53,16 @@ export default function Books() {
                     />
                   ) : null}
                   {book?.article ? (
-                    <Link
+                    <NavLink
                       to={`/books/${book.slug}`}
-                      className="text-sm text-blue-500"
+                      className={({ isPending }) =>
+                        cn("text-sm text-blue-500", {
+                          "font-bold": isPending,
+                        })
+                      }
                     >
                       Read more
-                    </Link>
+                    </NavLink>
                   ) : null}
                 </div>
               </div>
