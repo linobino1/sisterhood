@@ -23,7 +23,7 @@ const MobileMenu = () => {
   }, [pathname]);
   return (
     <>
-      <div className="z-20 relative bottom-2 left-2 sm:hidden">
+      <div className="z-20 relative bottom-2.5 left-2 sm:hidden">
         <Hamburger
           onToggle={toggleMenu}
           toggled={isMenuOpen}

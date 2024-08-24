@@ -72,7 +72,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body className="text-base font-josefin bg-bg text-text">
         <div className="min-h-screen flex flex-col">
-          <Gutter size="lg" className="mt-[33px] flex gap-4 justify-between">
+          <Gutter
+            as="header"
+            size="lg"
+            className="mt-[33px] flex gap-4 justify-between"
+          >
             <Link to="/">
               <h1 className="font-josefin text-4xl sm:text-6xl max-w-[11em] uppercase font-normal">
                 Sisterhood of Traveling Feminist Literature
