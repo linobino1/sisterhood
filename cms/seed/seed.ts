@@ -11,12 +11,13 @@ import { book1 } from './books/book1'
 import { book2 } from './books/book2'
 import { book3 } from './books/book3'
 import { book4 } from './books/book4'
+import { contact } from './pages/contact'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 const collections: CollectionSlug[] = ['media', 'books']
-const globals: GlobalSlug[] = ['site']
+const globals: GlobalSlug[] = ['site', 'home', 'about', 'contact', 'legal']
 
 export const seed = async (payload: Payload): Promise<void> => {
   payload.logger.info('Seeding database...')
@@ -91,6 +92,11 @@ export const seed = async (payload: Payload): Promise<void> => {
     slug: 'about',
     // @ts-ignore
     data: about(),
+  })
+  await payload.updateGlobal({
+    slug: 'contact',
+    // @ts-ignore
+    data: contact(),
   })
   await payload.updateGlobal({
     slug: 'legal',

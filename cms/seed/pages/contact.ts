@@ -68,6 +68,44 @@ export const contact = (): Seed<Contact> => ({
           type: 'paragraph',
           version: 1,
           textFormat: 0,
+          textStyle: '',
+        },
+
+        {
+          children: [
+            {
+              children: [
+                {
+                  detail: 0,
+                  format: 0,
+                  mode: 'normal',
+                  style: '',
+                  text: 'legal notice',
+                  type: 'text',
+                  version: 1,
+                },
+              ],
+              direction: 'ltr',
+              format: '',
+              indent: 0,
+              type: 'link',
+              version: 3,
+
+              fields: {
+                url: '/legal',
+                newTab: false,
+                linkType: 'custom',
+              },
+              id: '66c9dce6a6284a446f2fa34e',
+            },
+          ],
+          direction: 'ltr',
+          format: '',
+          indent: 0,
+          type: 'paragraph',
+          version: 1,
+          textFormat: 0,
+          textStyle: '',
         },
       ],
       direction: 'ltr',
