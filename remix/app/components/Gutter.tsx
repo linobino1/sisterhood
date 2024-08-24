@@ -23,8 +23,7 @@ const Gutter: React.FC<GutterProps> = ({
           "w-full": !disable,
           "mx-auto": !disable && center,
           "max-w-[min(970px,92vw)]": !disable && size === "sm",
-          "max-w-[min(1024px,92vw)]": !disable && size === "md",
-          "max-w-[min(1280px,92vw)]": !disable && size === "lg",
+          "max-w-[min(1280px,92vw)]": !disable && ["lg", "md"].includes(size),
         },
         className
       )}
