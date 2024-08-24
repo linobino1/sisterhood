@@ -4,74 +4,103 @@ import type { Seed } from '../types'
 export const legal = (): Seed<Legal> => ({
   content: {
     root: {
-      type: 'root',
-      version: 1,
-      indent: 0,
-      direction: 'ltr',
-      format: 'start',
       children: [
         {
-          type: 'paragraph',
-          version: 1,
           children: [
             {
+              text: 'This website is maintained by:',
               type: 'text',
-              text: 'This website has been made by:',
+              version: 1,
             },
           ],
-        },
-        {
-          type: 'paragraph',
+          direction: 'ltr',
+          format: '',
+          type: 'heading',
           version: 1,
+          tag: 'h2',
+        },
+
+        {
           children: [
             {
-              type: 'text',
               text: 'Agnė Jurgelėnaitė',
+              type: 'text',
+              version: 1,
             },
+
             {
               type: 'linebreak',
+              version: 1,
             },
+
             {
-              type: 'text',
               text: 'Kemetiškių gatvė 12',
+              type: 'text',
+              version: 1,
             },
+
             {
               type: 'linebreak',
+              version: 1,
             },
+
             {
-              type: 'text',
               text: 'Molėtų rajonas',
+              type: 'text',
+              version: 1,
             },
+
             {
               type: 'linebreak',
+              version: 1,
             },
+
             {
-              type: 'text',
               text: 'Lithuania',
+              type: 'text',
+              version: 1,
             },
           ],
-        },
-        {
+          direction: 'ltr',
+          format: '',
           type: 'paragraph',
           version: 1,
+        },
+
+        {
           children: [
             {
+              children: [
+                {
+                  text: 'contact@sisterhoodoftravelingfeministliterature.com',
+                  type: 'text',
+                  version: 1,
+                },
+              ],
+              direction: 'ltr',
+              format: '',
               type: 'link',
+              version: 3,
+
               fields: {
                 url: 'mailto:contact@sisterhoodoftravelingfeministliterature.com',
                 newTab: true,
                 linkType: 'custom',
               },
-              children: [
-                {
-                  type: 'text',
-                  text: 'contact@sisterhoodoftravelingfeministliterature.com',
-                },
-              ],
+              id: '66c9de63a6284a446f2fa34f',
             },
           ],
+          direction: 'ltr',
+          format: '',
+          type: 'paragraph',
+          version: 1,
         },
       ],
+      direction: 'ltr',
+      format: 'start',
+      indent: 0,
+      type: 'root',
+      version: 1,
     },
   },
 })
