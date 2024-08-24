@@ -1,5 +1,5 @@
 import { json, LoaderFunctionArgs } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
+import { useLoaderData } from "@remix-run/react";
 import LexicalContent from "~/lexical/LexicalContent";
 import { errors } from "~/util/errors";
 import { gqlClient } from "~/util/gqlClient";
