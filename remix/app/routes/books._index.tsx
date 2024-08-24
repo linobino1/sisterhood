@@ -39,7 +39,7 @@ export default function Books() {
                     alt={book.image.alt}
                     width={book.image.width ?? 300}
                     height={book.image.height ?? 200}
-                    className="w-full h-auto object-cover"
+                    className="w-full h-auto object-cover bg-zinc-200"
                   />
                 ) : null}
                 <div className="py-2.5 sm:px-1">
