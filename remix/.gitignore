@@ -1,3 +1,7 @@
+schema.graphql
+payload-types.ts
+graphql-env.d.ts
+
 node_modules
 
 /.cache
