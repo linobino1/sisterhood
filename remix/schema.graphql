@@ -1,14 +1,18 @@
 type Query {
+  Book(id: String!, draft: Boolean): Book
+  Books(draft: Boolean, where: Book_where, limit: Int, page: Int, sort: String): Books
+  countBooks(draft: Boolean, where: Book_where): countBooks
+  docAccessBook(id: String!): booksDocAccess
+  Media(id: String!, draft: Boolean): Media
+  allMedia(draft: Boolean, where: Media_where, limit: Int, page: Int, sort: String): allMedia
+  countallMedia(draft: Boolean, where: Media_where): countallMedia
+  docAccessMedia(id: String!): mediaDocAccess
   User(id: String!, draft: Boolean): User
   Users(draft: Boolean, where: User_where, limit: Int, page: Int, sort: String): Users
   countUsers(draft: Boolean, where: User_where): countUsers
   docAccessUser(id: String!): usersDocAccess
   meUser: usersMe
   initializedUser: Boolean
-  Media(id: String!, draft: Boolean): Media
-  allMedia(draft: Boolean, where: Media_where, limit: Int, page: Int, sort: String): allMedia
-  countallMedia(draft: Boolean, where: Media_where): countallMedia
-  docAccessMedia(id: String!): mediaDocAccess
   PayloadPreference(id: String!, draft: Boolean): PayloadPreference
   PayloadPreferences(draft: Boolean, where: PayloadPreference_where, limit: Int, page: Int, sort: String): PayloadPreferences
   countPayloadPreferences(draft: Boolean, where: PayloadPreference_where): countPayloadPreferences
@@ -17,6 +21,8 @@ type Query {
   docAccessHome: homeDocAccess
   About(draft: Boolean): About
   docAccessAbout: aboutDocAccess
+  Contact(draft: Boolean): Contact
+  docAccessContact: contactDocAccess
   Legal(draft: Boolean): Legal
   docAccessLegal: legalDocAccess
   Site(draft: Boolean): Site
@@ -24,18 +30,17 @@ type Query {
   Access: Access
 }
 
-type User {
+type Book {
   id: String
+  title: String!
+  slug: String
+  author: String
+  date: DateTime
+  info(depth: Int): JSON
+  image(where: Book_Image_where): Media!
+  article(depth: Int): JSON
   updatedAt: DateTime
   createdAt: DateTime
-  email: EmailAddress!
-  resetPasswordToken: String
-  resetPasswordExpiration: DateTime
-  salt: String
-  hash: String
-  loginAttempts: Float
-  lockUntil: DateTime
-  password: String!
 }
 
 """
@@ -44,243 +49,9 @@ A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `dat
 scalar DateTime
 
 """
-A field whose value conforms to the standard internet email address format as specified in HTML Spec: https://html.spec.whatwg.org/multipage/input.html#valid-e-mail-address.
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
-scalar EmailAddress @specifiedBy(url: "https://html.spec.whatwg.org/multipage/input.html#valid-e-mail-address")
-
-type Users {
-  docs: [User]
-  hasNextPage: Boolean
-  hasPrevPage: Boolean
-  limit: Int
-  nextPage: Int
-  offset: Int
-  page: Int
-  pagingCounter: Int
-  prevPage: Int
-  totalDocs: Int
-  totalPages: Int
-}
-
-input User_where {
-  updatedAt: User_updatedAt_operator
-  createdAt: User_createdAt_operator
-  email: User_email_operator
-  id: User_id_operator
-  AND: [User_where_and]
-  OR: [User_where_or]
-}
-
-input User_updatedAt_operator {
-  equals: DateTime
-  not_equals: DateTime
-  greater_than_equal: DateTime
-  greater_than: DateTime
-  less_than_equal: DateTime
-  less_than: DateTime
-  like: DateTime
-  exists: Boolean
-}
-
-input User_createdAt_operator {
-  equals: DateTime
-  not_equals: DateTime
-  greater_than_equal: DateTime
-  greater_than: DateTime
-  less_than_equal: DateTime
-  less_than: DateTime
-  like: DateTime
-  exists: Boolean
-}
-
-input User_email_operator {
-  equals: EmailAddress
-  not_equals: EmailAddress
-  like: EmailAddress
-  contains: EmailAddress
-  in: [EmailAddress]
-  not_in: [EmailAddress]
-  all: [EmailAddress]
-}
-
-input User_id_operator {
-  equals: String
-  not_equals: String
-  like: String
-  contains: String
-  in: [String]
-  not_in: [String]
-  all: [String]
-  exists: Boolean
-}
-
-input User_where_and {
-  updatedAt: User_updatedAt_operator
-  createdAt: User_createdAt_operator
-  email: User_email_operator
-  id: User_id_operator
-  AND: [User_where_and]
-  OR: [User_where_or]
-}
-
-input User_where_or {
-  updatedAt: User_updatedAt_operator
-  createdAt: User_createdAt_operator
-  email: User_email_operator
-  id: User_id_operator
-  AND: [User_where_and]
-  OR: [User_where_or]
-}
-
-type countUsers {
-  totalDocs: Int
-}
-
-type usersDocAccess {
-  fields: UsersDocAccessFields
-  create: UsersCreateDocAccess
-  read: UsersReadDocAccess
-  update: UsersUpdateDocAccess
-  delete: UsersDeleteDocAccess
-  unlock: UsersUnlockDocAccess
-}
-
-type UsersDocAccessFields {
-  updatedAt: UsersDocAccessFields_updatedAt
-  createdAt: UsersDocAccessFields_createdAt
-  email: UsersDocAccessFields_email
-  password: UsersDocAccessFields_password
-}
-
-type UsersDocAccessFields_updatedAt {
-  create: UsersDocAccessFields_updatedAt_Create
-  read: UsersDocAccessFields_updatedAt_Read
-  update: UsersDocAccessFields_updatedAt_Update
-  delete: UsersDocAccessFields_updatedAt_Delete
-}
-
-type UsersDocAccessFields_updatedAt_Create {
-  permission: Boolean!
-}
-
-type UsersDocAccessFields_updatedAt_Read {
-  permission: Boolean!
-}
-
-type UsersDocAccessFields_updatedAt_Update {
-  permission: Boolean!
-}
-
-type UsersDocAccessFields_updatedAt_Delete {
-  permission: Boolean!
-}
-
-type UsersDocAccessFields_createdAt {
-  create: UsersDocAccessFields_createdAt_Create
-  read: UsersDocAccessFields_createdAt_Read
-  update: UsersDocAccessFields_createdAt_Update
-  delete: UsersDocAccessFields_createdAt_Delete
-}
-
-type UsersDocAccessFields_createdAt_Create {
-  permission: Boolean!
-}
-
-type UsersDocAccessFields_createdAt_Read {
-  permission: Boolean!
-}
-
-type UsersDocAccessFields_createdAt_Update {
-  permission: Boolean!
-}
-
-type UsersDocAccessFields_createdAt_Delete {
-  permission: Boolean!
-}
-
-type UsersDocAccessFields_email {
-  create: UsersDocAccessFields_email_Create
-  read: UsersDocAccessFields_email_Read
-  update: UsersDocAccessFields_email_Update
-  delete: UsersDocAccessFields_email_Delete
-}
-
-type UsersDocAccessFields_email_Create {
-  permission: Boolean!
-}
-
-type UsersDocAccessFields_email_Read {
-  permission: Boolean!
-}
-
-type UsersDocAccessFields_email_Update {
-  permission: Boolean!
-}
-
-type UsersDocAccessFields_email_Delete {
-  permission: Boolean!
-}
-
-type UsersDocAccessFields_password {
-  create: UsersDocAccessFields_password_Create
-  read: UsersDocAccessFields_password_Read
-  update: UsersDocAccessFields_password_Update
-  delete: UsersDocAccessFields_password_Delete
-}
-
-type UsersDocAccessFields_password_Create {
-  permission: Boolean!
-}
-
-type UsersDocAccessFields_password_Read {
-  permission: Boolean!
-}
-
-type UsersDocAccessFields_password_Update {
-  permission: Boolean!
-}
-
-type UsersDocAccessFields_password_Delete {
-  permission: Boolean!
-}
-
-type UsersCreateDocAccess {
-  permission: Boolean!
-  where: JSONObject
-}
-
-"""
-The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
-"""
-scalar JSONObject @specifiedBy(url: "http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf")
-
-type UsersReadDocAccess {
-  permission: Boolean!
-  where: JSONObject
-}
-
-type UsersUpdateDocAccess {
-  permission: Boolean!
-  where: JSONObject
-}
-
-type UsersDeleteDocAccess {
-  permission: Boolean!
-  where: JSONObject
-}
-
-type UsersUnlockDocAccess {
-  permission: Boolean!
-  where: JSONObject
-}
-
-type usersMe {
-  collection: String
-  exp: Int
-  strategy: String
-  token: String
-  user: User
-}
+scalar JSON @specifiedBy(url: "http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf")
 
 type Media {
   id: String
@@ -296,6 +67,609 @@ type Media {
   height: Float
   focalX: Float
   focalY: Float
+}
+
+input Book_Image_where {
+  alt: Book_Image_alt_operator
+  updatedAt: Book_Image_updatedAt_operator
+  createdAt: Book_Image_createdAt_operator
+  url: Book_Image_url_operator
+  thumbnailURL: Book_Image_thumbnailURL_operator
+  filename: Book_Image_filename_operator
+  mimeType: Book_Image_mimeType_operator
+  filesize: Book_Image_filesize_operator
+  width: Book_Image_width_operator
+  height: Book_Image_height_operator
+  focalX: Book_Image_focalX_operator
+  focalY: Book_Image_focalY_operator
+  id: Book_Image_id_operator
+  AND: [Book_Image_where_and]
+  OR: [Book_Image_where_or]
+}
+
+input Book_Image_alt_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+}
+
+input Book_Image_updatedAt_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+  exists: Boolean
+}
+
+input Book_Image_createdAt_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+  exists: Boolean
+}
+
+input Book_Image_url_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Book_Image_thumbnailURL_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Book_Image_filename_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Book_Image_mimeType_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Book_Image_filesize_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Book_Image_width_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Book_Image_height_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Book_Image_focalX_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Book_Image_focalY_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Book_Image_id_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Book_Image_where_and {
+  alt: Book_Image_alt_operator
+  updatedAt: Book_Image_updatedAt_operator
+  createdAt: Book_Image_createdAt_operator
+  url: Book_Image_url_operator
+  thumbnailURL: Book_Image_thumbnailURL_operator
+  filename: Book_Image_filename_operator
+  mimeType: Book_Image_mimeType_operator
+  filesize: Book_Image_filesize_operator
+  width: Book_Image_width_operator
+  height: Book_Image_height_operator
+  focalX: Book_Image_focalX_operator
+  focalY: Book_Image_focalY_operator
+  id: Book_Image_id_operator
+  AND: [Book_Image_where_and]
+  OR: [Book_Image_where_or]
+}
+
+input Book_Image_where_or {
+  alt: Book_Image_alt_operator
+  updatedAt: Book_Image_updatedAt_operator
+  createdAt: Book_Image_createdAt_operator
+  url: Book_Image_url_operator
+  thumbnailURL: Book_Image_thumbnailURL_operator
+  filename: Book_Image_filename_operator
+  mimeType: Book_Image_mimeType_operator
+  filesize: Book_Image_filesize_operator
+  width: Book_Image_width_operator
+  height: Book_Image_height_operator
+  focalX: Book_Image_focalX_operator
+  focalY: Book_Image_focalY_operator
+  id: Book_Image_id_operator
+  AND: [Book_Image_where_and]
+  OR: [Book_Image_where_or]
+}
+
+type Books {
+  docs: [Book]
+  hasNextPage: Boolean
+  hasPrevPage: Boolean
+  limit: Int
+  nextPage: Int
+  offset: Int
+  page: Int
+  pagingCounter: Int
+  prevPage: Int
+  totalDocs: Int
+  totalPages: Int
+}
+
+input Book_where {
+  title: Book_title_operator
+  slug: Book_slug_operator
+  author: Book_author_operator
+  date: Book_date_operator
+  info: Book_info_operator
+  image: Book_image_operator
+  article: Book_article_operator
+  updatedAt: Book_updatedAt_operator
+  createdAt: Book_createdAt_operator
+  id: Book_id_operator
+  AND: [Book_where_and]
+  OR: [Book_where_or]
+}
+
+input Book_title_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+}
+
+input Book_slug_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Book_author_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Book_date_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+  exists: Boolean
+}
+
+input Book_info_operator {
+  equals: JSON
+  not_equals: JSON
+  like: JSON
+  contains: JSON
+  exists: Boolean
+}
+
+input Book_image_operator {
+  equals: String
+  not_equals: String
+}
+
+input Book_article_operator {
+  equals: JSON
+  not_equals: JSON
+  like: JSON
+  contains: JSON
+  exists: Boolean
+}
+
+input Book_updatedAt_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+  exists: Boolean
+}
+
+input Book_createdAt_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+  exists: Boolean
+}
+
+input Book_id_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Book_where_and {
+  title: Book_title_operator
+  slug: Book_slug_operator
+  author: Book_author_operator
+  date: Book_date_operator
+  info: Book_info_operator
+  image: Book_image_operator
+  article: Book_article_operator
+  updatedAt: Book_updatedAt_operator
+  createdAt: Book_createdAt_operator
+  id: Book_id_operator
+  AND: [Book_where_and]
+  OR: [Book_where_or]
+}
+
+input Book_where_or {
+  title: Book_title_operator
+  slug: Book_slug_operator
+  author: Book_author_operator
+  date: Book_date_operator
+  info: Book_info_operator
+  image: Book_image_operator
+  article: Book_article_operator
+  updatedAt: Book_updatedAt_operator
+  createdAt: Book_createdAt_operator
+  id: Book_id_operator
+  AND: [Book_where_and]
+  OR: [Book_where_or]
+}
+
+type countBooks {
+  totalDocs: Int
+}
+
+type booksDocAccess {
+  fields: BooksDocAccessFields
+  create: BooksCreateDocAccess
+  read: BooksReadDocAccess
+  update: BooksUpdateDocAccess
+  delete: BooksDeleteDocAccess
+}
+
+type BooksDocAccessFields {
+  title: BooksDocAccessFields_title
+  slug: BooksDocAccessFields_slug
+  author: BooksDocAccessFields_author
+  date: BooksDocAccessFields_date
+  info: BooksDocAccessFields_info
+  image: BooksDocAccessFields_image
+  article: BooksDocAccessFields_article
+  updatedAt: BooksDocAccessFields_updatedAt
+  createdAt: BooksDocAccessFields_createdAt
+}
+
+type BooksDocAccessFields_title {
+  create: BooksDocAccessFields_title_Create
+  read: BooksDocAccessFields_title_Read
+  update: BooksDocAccessFields_title_Update
+  delete: BooksDocAccessFields_title_Delete
+}
+
+type BooksDocAccessFields_title_Create {
+  permission: Boolean!
+}
+
+type BooksDocAccessFields_title_Read {
+  permission: Boolean!
+}
+
+type BooksDocAccessFields_title_Update {
+  permission: Boolean!
+}
+
+type BooksDocAccessFields_title_Delete {
+  permission: Boolean!
+}
+
+type BooksDocAccessFields_slug {
+  create: BooksDocAccessFields_slug_Create
+  read: BooksDocAccessFields_slug_Read
+  update: BooksDocAccessFields_slug_Update
+  delete: BooksDocAccessFields_slug_Delete
+}
+
+type BooksDocAccessFields_slug_Create {
+  permission: Boolean!
+}
+
+type BooksDocAccessFields_slug_Read {
+  permission: Boolean!
+}
+
+type BooksDocAccessFields_slug_Update {
+  permission: Boolean!
+}
+
+type BooksDocAccessFields_slug_Delete {
+  permission: Boolean!
+}
+
+type BooksDocAccessFields_author {
+  create: BooksDocAccessFields_author_Create
+  read: BooksDocAccessFields_author_Read
+  update: BooksDocAccessFields_author_Update
+  delete: BooksDocAccessFields_author_Delete
+}
+
+type BooksDocAccessFields_author_Create {
+  permission: Boolean!
+}
+
+type BooksDocAccessFields_author_Read {
+  permission: Boolean!
+}
+
+type BooksDocAccessFields_author_Update {
+  permission: Boolean!
+}
+
+type BooksDocAccessFields_author_Delete {
+  permission: Boolean!
+}
+
+type BooksDocAccessFields_date {
+  create: BooksDocAccessFields_date_Create
+  read: BooksDocAccessFields_date_Read
+  update: BooksDocAccessFields_date_Update
+  delete: BooksDocAccessFields_date_Delete
+}
+
+type BooksDocAccessFields_date_Create {
+  permission: Boolean!
+}
+
+type BooksDocAccessFields_date_Read {
+  permission: Boolean!
+}
+
+type BooksDocAccessFields_date_Update {
+  permission: Boolean!
+}
+
+type BooksDocAccessFields_date_Delete {
+  permission: Boolean!
+}
+
+type BooksDocAccessFields_info {
+  create: BooksDocAccessFields_info_Create
+  read: BooksDocAccessFields_info_Read
+  update: BooksDocAccessFields_info_Update
+  delete: BooksDocAccessFields_info_Delete
+}
+
+type BooksDocAccessFields_info_Create {
+  permission: Boolean!
+}
+
+type BooksDocAccessFields_info_Read {
+  permission: Boolean!
+}
+
+type BooksDocAccessFields_info_Update {
+  permission: Boolean!
+}
+
+type BooksDocAccessFields_info_Delete {
+  permission: Boolean!
+}
+
+type BooksDocAccessFields_image {
+  create: BooksDocAccessFields_image_Create
+  read: BooksDocAccessFields_image_Read
+  update: BooksDocAccessFields_image_Update
+  delete: BooksDocAccessFields_image_Delete
+}
+
+type BooksDocAccessFields_image_Create {
+  permission: Boolean!
+}
+
+type BooksDocAccessFields_image_Read {
+  permission: Boolean!
+}
+
+type BooksDocAccessFields_image_Update {
+  permission: Boolean!
+}
+
+type BooksDocAccessFields_image_Delete {
+  permission: Boolean!
+}
+
+type BooksDocAccessFields_article {
+  create: BooksDocAccessFields_article_Create
+  read: BooksDocAccessFields_article_Read
+  update: BooksDocAccessFields_article_Update
+  delete: BooksDocAccessFields_article_Delete
+}
+
+type BooksDocAccessFields_article_Create {
+  permission: Boolean!
+}
+
+type BooksDocAccessFields_article_Read {
+  permission: Boolean!
+}
+
+type BooksDocAccessFields_article_Update {
+  permission: Boolean!
+}
+
+type BooksDocAccessFields_article_Delete {
+  permission: Boolean!
+}
+
+type BooksDocAccessFields_updatedAt {
+  create: BooksDocAccessFields_updatedAt_Create
+  read: BooksDocAccessFields_updatedAt_Read
+  update: BooksDocAccessFields_updatedAt_Update
+  delete: BooksDocAccessFields_updatedAt_Delete
+}
+
+type BooksDocAccessFields_updatedAt_Create {
+  permission: Boolean!
+}
+
+type BooksDocAccessFields_updatedAt_Read {
+  permission: Boolean!
+}
+
+type BooksDocAccessFields_updatedAt_Update {
+  permission: Boolean!
+}
+
+type BooksDocAccessFields_updatedAt_Delete {
+  permission: Boolean!
+}
+
+type BooksDocAccessFields_createdAt {
+  create: BooksDocAccessFields_createdAt_Create
+  read: BooksDocAccessFields_createdAt_Read
+  update: BooksDocAccessFields_createdAt_Update
+  delete: BooksDocAccessFields_createdAt_Delete
+}
+
+type BooksDocAccessFields_createdAt_Create {
+  permission: Boolean!
+}
+
+type BooksDocAccessFields_createdAt_Read {
+  permission: Boolean!
+}
+
+type BooksDocAccessFields_createdAt_Update {
+  permission: Boolean!
+}
+
+type BooksDocAccessFields_createdAt_Delete {
+  permission: Boolean!
+}
+
+type BooksCreateDocAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+"""
+The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSONObject @specifiedBy(url: "http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf")
+
+type BooksReadDocAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type BooksUpdateDocAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type BooksDeleteDocAccess {
+  permission: Boolean!
+  where: JSONObject
 }
 
 type allMedia {
@@ -826,6 +1200,254 @@ type MediaDeleteDocAccess {
   where: JSONObject
 }
 
+type User {
+  id: String
+  updatedAt: DateTime
+  createdAt: DateTime
+  email: EmailAddress!
+  resetPasswordToken: String
+  resetPasswordExpiration: DateTime
+  salt: String
+  hash: String
+  loginAttempts: Float
+  lockUntil: DateTime
+  password: String!
+}
+
+"""
+A field whose value conforms to the standard internet email address format as specified in HTML Spec: https://html.spec.whatwg.org/multipage/input.html#valid-e-mail-address.
+"""
+scalar EmailAddress @specifiedBy(url: "https://html.spec.whatwg.org/multipage/input.html#valid-e-mail-address")
+
+type Users {
+  docs: [User]
+  hasNextPage: Boolean
+  hasPrevPage: Boolean
+  limit: Int
+  nextPage: Int
+  offset: Int
+  page: Int
+  pagingCounter: Int
+  prevPage: Int
+  totalDocs: Int
+  totalPages: Int
+}
+
+input User_where {
+  updatedAt: User_updatedAt_operator
+  createdAt: User_createdAt_operator
+  email: User_email_operator
+  id: User_id_operator
+  AND: [User_where_and]
+  OR: [User_where_or]
+}
+
+input User_updatedAt_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+  exists: Boolean
+}
+
+input User_createdAt_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+  exists: Boolean
+}
+
+input User_email_operator {
+  equals: EmailAddress
+  not_equals: EmailAddress
+  like: EmailAddress
+  contains: EmailAddress
+  in: [EmailAddress]
+  not_in: [EmailAddress]
+  all: [EmailAddress]
+}
+
+input User_id_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input User_where_and {
+  updatedAt: User_updatedAt_operator
+  createdAt: User_createdAt_operator
+  email: User_email_operator
+  id: User_id_operator
+  AND: [User_where_and]
+  OR: [User_where_or]
+}
+
+input User_where_or {
+  updatedAt: User_updatedAt_operator
+  createdAt: User_createdAt_operator
+  email: User_email_operator
+  id: User_id_operator
+  AND: [User_where_and]
+  OR: [User_where_or]
+}
+
+type countUsers {
+  totalDocs: Int
+}
+
+type usersDocAccess {
+  fields: UsersDocAccessFields
+  create: UsersCreateDocAccess
+  read: UsersReadDocAccess
+  update: UsersUpdateDocAccess
+  delete: UsersDeleteDocAccess
+  unlock: UsersUnlockDocAccess
+}
+
+type UsersDocAccessFields {
+  updatedAt: UsersDocAccessFields_updatedAt
+  createdAt: UsersDocAccessFields_createdAt
+  email: UsersDocAccessFields_email
+  password: UsersDocAccessFields_password
+}
+
+type UsersDocAccessFields_updatedAt {
+  create: UsersDocAccessFields_updatedAt_Create
+  read: UsersDocAccessFields_updatedAt_Read
+  update: UsersDocAccessFields_updatedAt_Update
+  delete: UsersDocAccessFields_updatedAt_Delete
+}
+
+type UsersDocAccessFields_updatedAt_Create {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_updatedAt_Read {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_updatedAt_Update {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_updatedAt_Delete {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_createdAt {
+  create: UsersDocAccessFields_createdAt_Create
+  read: UsersDocAccessFields_createdAt_Read
+  update: UsersDocAccessFields_createdAt_Update
+  delete: UsersDocAccessFields_createdAt_Delete
+}
+
+type UsersDocAccessFields_createdAt_Create {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_createdAt_Read {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_createdAt_Update {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_createdAt_Delete {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_email {
+  create: UsersDocAccessFields_email_Create
+  read: UsersDocAccessFields_email_Read
+  update: UsersDocAccessFields_email_Update
+  delete: UsersDocAccessFields_email_Delete
+}
+
+type UsersDocAccessFields_email_Create {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_email_Read {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_email_Update {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_email_Delete {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_password {
+  create: UsersDocAccessFields_password_Create
+  read: UsersDocAccessFields_password_Read
+  update: UsersDocAccessFields_password_Update
+  delete: UsersDocAccessFields_password_Delete
+}
+
+type UsersDocAccessFields_password_Create {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_password_Read {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_password_Update {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_password_Delete {
+  permission: Boolean!
+}
+
+type UsersCreateDocAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type UsersReadDocAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type UsersUpdateDocAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type UsersDeleteDocAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type UsersUnlockDocAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type usersMe {
+  collection: String
+  exp: Int
+  strategy: String
+  token: String
+  user: User
+}
+
 type PayloadPreference {
   id: String
   user: PayloadPreference_User_Relationship!
@@ -845,11 +1467,6 @@ enum PayloadPreference_User_RelationTo {
 }
 
 union PayloadPreference_User = User
-
-"""
-The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
-"""
-scalar JSON @specifiedBy(url: "http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf")
 
 type PayloadPreferences {
   docs: [PayloadPreference]
@@ -1306,6 +1923,103 @@ type AboutReadDocAccess {
 }
 
 type AboutUpdateDocAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type Contact {
+  content(depth: Int): JSON
+  updatedAt: DateTime
+  createdAt: DateTime
+}
+
+type contactDocAccess {
+  fields: ContactDocAccessFields
+  read: ContactReadDocAccess
+  update: ContactUpdateDocAccess
+}
+
+type ContactDocAccessFields {
+  content: ContactDocAccessFields_content
+  updatedAt: ContactDocAccessFields_updatedAt
+  createdAt: ContactDocAccessFields_createdAt
+}
+
+type ContactDocAccessFields_content {
+  create: ContactDocAccessFields_content_Create
+  read: ContactDocAccessFields_content_Read
+  update: ContactDocAccessFields_content_Update
+  delete: ContactDocAccessFields_content_Delete
+}
+
+type ContactDocAccessFields_content_Create {
+  permission: Boolean!
+}
+
+type ContactDocAccessFields_content_Read {
+  permission: Boolean!
+}
+
+type ContactDocAccessFields_content_Update {
+  permission: Boolean!
+}
+
+type ContactDocAccessFields_content_Delete {
+  permission: Boolean!
+}
+
+type ContactDocAccessFields_updatedAt {
+  create: ContactDocAccessFields_updatedAt_Create
+  read: ContactDocAccessFields_updatedAt_Read
+  update: ContactDocAccessFields_updatedAt_Update
+  delete: ContactDocAccessFields_updatedAt_Delete
+}
+
+type ContactDocAccessFields_updatedAt_Create {
+  permission: Boolean!
+}
+
+type ContactDocAccessFields_updatedAt_Read {
+  permission: Boolean!
+}
+
+type ContactDocAccessFields_updatedAt_Update {
+  permission: Boolean!
+}
+
+type ContactDocAccessFields_updatedAt_Delete {
+  permission: Boolean!
+}
+
+type ContactDocAccessFields_createdAt {
+  create: ContactDocAccessFields_createdAt_Create
+  read: ContactDocAccessFields_createdAt_Read
+  update: ContactDocAccessFields_createdAt_Update
+  delete: ContactDocAccessFields_createdAt_Delete
+}
+
+type ContactDocAccessFields_createdAt_Create {
+  permission: Boolean!
+}
+
+type ContactDocAccessFields_createdAt_Read {
+  permission: Boolean!
+}
+
+type ContactDocAccessFields_createdAt_Update {
+  permission: Boolean!
+}
+
+type ContactDocAccessFields_createdAt_Delete {
+  permission: Boolean!
+}
+
+type ContactReadDocAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type ContactUpdateDocAccess {
   permission: Boolean!
   where: JSONObject
 }
@@ -1779,144 +2493,260 @@ type SiteUpdateDocAccess {
 
 type Access {
   canAccessAdmin: Boolean!
-  users: usersAccess
+  books: booksAccess
   media: mediaAccess
+  users: usersAccess
   payload_preferences: payload_preferencesAccess
   home: homeAccess
   about: aboutAccess
+  contact: contactAccess
   legal: legalAccess
   site: siteAccess
 }
 
-type usersAccess {
-  fields: UsersFields
-  create: UsersCreateAccess
-  read: UsersReadAccess
-  update: UsersUpdateAccess
-  delete: UsersDeleteAccess
-  unlock: UsersUnlockAccess
+type booksAccess {
+  fields: BooksFields
+  create: BooksCreateAccess
+  read: BooksReadAccess
+  update: BooksUpdateAccess
+  delete: BooksDeleteAccess
 }
 
-type UsersFields {
-  updatedAt: UsersFields_updatedAt
-  createdAt: UsersFields_createdAt
-  email: UsersFields_email
-  password: UsersFields_password
+type BooksFields {
+  title: BooksFields_title
+  slug: BooksFields_slug
+  author: BooksFields_author
+  date: BooksFields_date
+  info: BooksFields_info
+  image: BooksFields_image
+  article: BooksFields_article
+  updatedAt: BooksFields_updatedAt
+  createdAt: BooksFields_createdAt
 }
 
-type UsersFields_updatedAt {
-  create: UsersFields_updatedAt_Create
-  read: UsersFields_updatedAt_Read
-  update: UsersFields_updatedAt_Update
-  delete: UsersFields_updatedAt_Delete
+type BooksFields_title {
+  create: BooksFields_title_Create
+  read: BooksFields_title_Read
+  update: BooksFields_title_Update
+  delete: BooksFields_title_Delete
 }
 
-type UsersFields_updatedAt_Create {
+type BooksFields_title_Create {
   permission: Boolean!
 }
 
-type UsersFields_updatedAt_Read {
+type BooksFields_title_Read {
   permission: Boolean!
 }
 
-type UsersFields_updatedAt_Update {
+type BooksFields_title_Update {
   permission: Boolean!
 }
 
-type UsersFields_updatedAt_Delete {
+type BooksFields_title_Delete {
   permission: Boolean!
 }
 
-type UsersFields_createdAt {
-  create: UsersFields_createdAt_Create
-  read: UsersFields_createdAt_Read
-  update: UsersFields_createdAt_Update
-  delete: UsersFields_createdAt_Delete
+type BooksFields_slug {
+  create: BooksFields_slug_Create
+  read: BooksFields_slug_Read
+  update: BooksFields_slug_Update
+  delete: BooksFields_slug_Delete
 }
 
-type UsersFields_createdAt_Create {
+type BooksFields_slug_Create {
   permission: Boolean!
 }
 
-type UsersFields_createdAt_Read {
+type BooksFields_slug_Read {
   permission: Boolean!
 }
 
-type UsersFields_createdAt_Update {
+type BooksFields_slug_Update {
   permission: Boolean!
 }
 
-type UsersFields_createdAt_Delete {
+type BooksFields_slug_Delete {
   permission: Boolean!
 }
 
-type UsersFields_email {
-  create: UsersFields_email_Create
-  read: UsersFields_email_Read
-  update: UsersFields_email_Update
-  delete: UsersFields_email_Delete
+type BooksFields_author {
+  create: BooksFields_author_Create
+  read: BooksFields_author_Read
+  update: BooksFields_author_Update
+  delete: BooksFields_author_Delete
 }
 
-type UsersFields_email_Create {
+type BooksFields_author_Create {
   permission: Boolean!
 }
 
-type UsersFields_email_Read {
+type BooksFields_author_Read {
   permission: Boolean!
 }
 
-type UsersFields_email_Update {
+type BooksFields_author_Update {
   permission: Boolean!
 }
 
-type UsersFields_email_Delete {
+type BooksFields_author_Delete {
   permission: Boolean!
 }
 
-type UsersFields_password {
-  create: UsersFields_password_Create
-  read: UsersFields_password_Read
-  update: UsersFields_password_Update
-  delete: UsersFields_password_Delete
+type BooksFields_date {
+  create: BooksFields_date_Create
+  read: BooksFields_date_Read
+  update: BooksFields_date_Update
+  delete: BooksFields_date_Delete
 }
 
-type UsersFields_password_Create {
+type BooksFields_date_Create {
   permission: Boolean!
 }
 
-type UsersFields_password_Read {
+type BooksFields_date_Read {
   permission: Boolean!
 }
 
-type UsersFields_password_Update {
+type BooksFields_date_Update {
   permission: Boolean!
 }
 
-type UsersFields_password_Delete {
+type BooksFields_date_Delete {
   permission: Boolean!
 }
 
-type UsersCreateAccess {
+type BooksFields_info {
+  create: BooksFields_info_Create
+  read: BooksFields_info_Read
+  update: BooksFields_info_Update
+  delete: BooksFields_info_Delete
+}
+
+type BooksFields_info_Create {
+  permission: Boolean!
+}
+
+type BooksFields_info_Read {
+  permission: Boolean!
+}
+
+type BooksFields_info_Update {
+  permission: Boolean!
+}
+
+type BooksFields_info_Delete {
+  permission: Boolean!
+}
+
+type BooksFields_image {
+  create: BooksFields_image_Create
+  read: BooksFields_image_Read
+  update: BooksFields_image_Update
+  delete: BooksFields_image_Delete
+}
+
+type BooksFields_image_Create {
+  permission: Boolean!
+}
+
+type BooksFields_image_Read {
+  permission: Boolean!
+}
+
+type BooksFields_image_Update {
+  permission: Boolean!
+}
+
+type BooksFields_image_Delete {
+  permission: Boolean!
+}
+
+type BooksFields_article {
+  create: BooksFields_article_Create
+  read: BooksFields_article_Read
+  update: BooksFields_article_Update
+  delete: BooksFields_article_Delete
+}
+
+type BooksFields_article_Create {
+  permission: Boolean!
+}
+
+type BooksFields_article_Read {
+  permission: Boolean!
+}
+
+type BooksFields_article_Update {
+  permission: Boolean!
+}
+
+type BooksFields_article_Delete {
+  permission: Boolean!
+}
+
+type BooksFields_updatedAt {
+  create: BooksFields_updatedAt_Create
+  read: BooksFields_updatedAt_Read
+  update: BooksFields_updatedAt_Update
+  delete: BooksFields_updatedAt_Delete
+}
+
+type BooksFields_updatedAt_Create {
+  permission: Boolean!
+}
+
+type BooksFields_updatedAt_Read {
+  permission: Boolean!
+}
+
+type BooksFields_updatedAt_Update {
+  permission: Boolean!
+}
+
+type BooksFields_updatedAt_Delete {
+  permission: Boolean!
+}
+
+type BooksFields_createdAt {
+  create: BooksFields_createdAt_Create
+  read: BooksFields_createdAt_Read
+  update: BooksFields_createdAt_Update
+  delete: BooksFields_createdAt_Delete
+}
+
+type BooksFields_createdAt_Create {
+  permission: Boolean!
+}
+
+type BooksFields_createdAt_Read {
+  permission: Boolean!
+}
+
+type BooksFields_createdAt_Update {
+  permission: Boolean!
+}
+
+type BooksFields_createdAt_Delete {
+  permission: Boolean!
+}
+
+type BooksCreateAccess {
   permission: Boolean!
   where: JSONObject
 }
 
-type UsersReadAccess {
+type BooksReadAccess {
   permission: Boolean!
   where: JSONObject
 }
 
-type UsersUpdateAccess {
+type BooksUpdateAccess {
   permission: Boolean!
   where: JSONObject
 }
 
-type UsersDeleteAccess {
-  permission: Boolean!
-  where: JSONObject
-}
-
-type UsersUnlockAccess {
+type BooksDeleteAccess {
   permission: Boolean!
   where: JSONObject
 }
@@ -2236,6 +3066,139 @@ type MediaUpdateAccess {
 }
 
 type MediaDeleteAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type usersAccess {
+  fields: UsersFields
+  create: UsersCreateAccess
+  read: UsersReadAccess
+  update: UsersUpdateAccess
+  delete: UsersDeleteAccess
+  unlock: UsersUnlockAccess
+}
+
+type UsersFields {
+  updatedAt: UsersFields_updatedAt
+  createdAt: UsersFields_createdAt
+  email: UsersFields_email
+  password: UsersFields_password
+}
+
+type UsersFields_updatedAt {
+  create: UsersFields_updatedAt_Create
+  read: UsersFields_updatedAt_Read
+  update: UsersFields_updatedAt_Update
+  delete: UsersFields_updatedAt_Delete
+}
+
+type UsersFields_updatedAt_Create {
+  permission: Boolean!
+}
+
+type UsersFields_updatedAt_Read {
+  permission: Boolean!
+}
+
+type UsersFields_updatedAt_Update {
+  permission: Boolean!
+}
+
+type UsersFields_updatedAt_Delete {
+  permission: Boolean!
+}
+
+type UsersFields_createdAt {
+  create: UsersFields_createdAt_Create
+  read: UsersFields_createdAt_Read
+  update: UsersFields_createdAt_Update
+  delete: UsersFields_createdAt_Delete
+}
+
+type UsersFields_createdAt_Create {
+  permission: Boolean!
+}
+
+type UsersFields_createdAt_Read {
+  permission: Boolean!
+}
+
+type UsersFields_createdAt_Update {
+  permission: Boolean!
+}
+
+type UsersFields_createdAt_Delete {
+  permission: Boolean!
+}
+
+type UsersFields_email {
+  create: UsersFields_email_Create
+  read: UsersFields_email_Read
+  update: UsersFields_email_Update
+  delete: UsersFields_email_Delete
+}
+
+type UsersFields_email_Create {
+  permission: Boolean!
+}
+
+type UsersFields_email_Read {
+  permission: Boolean!
+}
+
+type UsersFields_email_Update {
+  permission: Boolean!
+}
+
+type UsersFields_email_Delete {
+  permission: Boolean!
+}
+
+type UsersFields_password {
+  create: UsersFields_password_Create
+  read: UsersFields_password_Read
+  update: UsersFields_password_Update
+  delete: UsersFields_password_Delete
+}
+
+type UsersFields_password_Create {
+  permission: Boolean!
+}
+
+type UsersFields_password_Read {
+  permission: Boolean!
+}
+
+type UsersFields_password_Update {
+  permission: Boolean!
+}
+
+type UsersFields_password_Delete {
+  permission: Boolean!
+}
+
+type UsersCreateAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type UsersReadAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type UsersUpdateAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type UsersDeleteAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type UsersUnlockAccess {
   permission: Boolean!
   where: JSONObject
 }
@@ -2573,6 +3536,97 @@ type AboutUpdateAccess {
   where: JSONObject
 }
 
+type contactAccess {
+  fields: ContactFields
+  read: ContactReadAccess
+  update: ContactUpdateAccess
+}
+
+type ContactFields {
+  content: ContactFields_content
+  updatedAt: ContactFields_updatedAt
+  createdAt: ContactFields_createdAt
+}
+
+type ContactFields_content {
+  create: ContactFields_content_Create
+  read: ContactFields_content_Read
+  update: ContactFields_content_Update
+  delete: ContactFields_content_Delete
+}
+
+type ContactFields_content_Create {
+  permission: Boolean!
+}
+
+type ContactFields_content_Read {
+  permission: Boolean!
+}
+
+type ContactFields_content_Update {
+  permission: Boolean!
+}
+
+type ContactFields_content_Delete {
+  permission: Boolean!
+}
+
+type ContactFields_updatedAt {
+  create: ContactFields_updatedAt_Create
+  read: ContactFields_updatedAt_Read
+  update: ContactFields_updatedAt_Update
+  delete: ContactFields_updatedAt_Delete
+}
+
+type ContactFields_updatedAt_Create {
+  permission: Boolean!
+}
+
+type ContactFields_updatedAt_Read {
+  permission: Boolean!
+}
+
+type ContactFields_updatedAt_Update {
+  permission: Boolean!
+}
+
+type ContactFields_updatedAt_Delete {
+  permission: Boolean!
+}
+
+type ContactFields_createdAt {
+  create: ContactFields_createdAt_Create
+  read: ContactFields_createdAt_Read
+  update: ContactFields_createdAt_Update
+  delete: ContactFields_createdAt_Delete
+}
+
+type ContactFields_createdAt_Create {
+  permission: Boolean!
+}
+
+type ContactFields_createdAt_Read {
+  permission: Boolean!
+}
+
+type ContactFields_createdAt_Update {
+  permission: Boolean!
+}
+
+type ContactFields_createdAt_Delete {
+  permission: Boolean!
+}
+
+type ContactReadAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type ContactUpdateAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
 type legalAccess {
   fields: LegalFields
   read: LegalReadAccess
@@ -2832,6 +3886,13 @@ type SiteUpdateAccess {
 }
 
 type Mutation {
+  createBook(data: mutationBookInput!, draft: Boolean): Book
+  updateBook(id: String!, autosave: Boolean, data: mutationBookUpdateInput!, draft: Boolean): Book
+  deleteBook(id: String!): Book
+  duplicateBook(id: String!): Book
+  createMedia(data: mutationMediaInput!, draft: Boolean): Media
+  updateMedia(id: String!, autosave: Boolean, data: mutationMediaUpdateInput!, draft: Boolean): Media
+  deleteMedia(id: String!): Media
   createUser(data: mutationUserInput!, draft: Boolean): User
   updateUser(id: String!, autosave: Boolean, data: mutationUserUpdateInput!, draft: Boolean): User
   deleteUser(id: String!): User
@@ -2842,17 +3903,69 @@ type Mutation {
   forgotPasswordUser(disableEmail: Boolean, expiration: Int, email: String!): Boolean!
   resetPasswordUser(password: String, token: String): usersResetPassword
   verifyEmailUser(token: String): Boolean
-  createMedia(data: mutationMediaInput!, draft: Boolean): Media
-  updateMedia(id: String!, autosave: Boolean, data: mutationMediaUpdateInput!, draft: Boolean): Media
-  deleteMedia(id: String!): Media
   createPayloadPreference(data: mutationPayloadPreferenceInput!, draft: Boolean): PayloadPreference
   updatePayloadPreference(id: String!, autosave: Boolean, data: mutationPayloadPreferenceUpdateInput!, draft: Boolean): PayloadPreference
   deletePayloadPreference(id: String!): PayloadPreference
   duplicatePayloadPreference(id: String!): PayloadPreference
   updateHome(data: mutationHomeInput!, draft: Boolean): Home
   updateAbout(data: mutationAboutInput!, draft: Boolean): About
+  updateContact(data: mutationContactInput!, draft: Boolean): Contact
   updateLegal(data: mutationLegalInput!, draft: Boolean): Legal
   updateSite(data: mutationSiteInput!, draft: Boolean): Site
+}
+
+input mutationBookInput {
+  title: String!
+  slug: String
+  author: String
+  date: String
+  info: JSON
+  image: String!
+  article: JSON
+  updatedAt: String
+  createdAt: String
+}
+
+input mutationBookUpdateInput {
+  title: String
+  slug: String
+  author: String
+  date: String
+  info: JSON
+  image: String
+  article: JSON
+  updatedAt: String
+  createdAt: String
+}
+
+input mutationMediaInput {
+  alt: String!
+  updatedAt: String
+  createdAt: String
+  url: String
+  thumbnailURL: String
+  filename: String
+  mimeType: String
+  filesize: Float
+  width: Float
+  height: Float
+  focalX: Float
+  focalY: Float
+}
+
+input mutationMediaUpdateInput {
+  alt: String
+  updatedAt: String
+  createdAt: String
+  url: String
+  thumbnailURL: String
+  filename: String
+  mimeType: String
+  filesize: Float
+  width: Float
+  height: Float
+  focalX: Float
+  focalY: Float
 }
 
 input mutationUserInput {
@@ -2904,36 +4017,6 @@ type usersResetPassword {
   user: User
 }
 
-input mutationMediaInput {
-  alt: String!
-  updatedAt: String
-  createdAt: String
-  url: String
-  thumbnailURL: String
-  filename: String
-  mimeType: String
-  filesize: Float
-  width: Float
-  height: Float
-  focalX: Float
-  focalY: Float
-}
-
-input mutationMediaUpdateInput {
-  alt: String
-  updatedAt: String
-  createdAt: String
-  url: String
-  thumbnailURL: String
-  filename: String
-  mimeType: String
-  filesize: Float
-  width: Float
-  height: Float
-  focalX: Float
-  focalY: Float
-}
-
 input mutationPayloadPreferenceInput {
   user: PayloadPreference_UserRelationshipInput
   key: String
@@ -2975,6 +4058,12 @@ input mutationHomeInput {
 }
 
 input mutationAboutInput {
+  content: JSON
+  updatedAt: String
+  createdAt: String
+}
+
+input mutationContactInput {
   content: JSON
   updatedAt: String
   createdAt: String

@@ -4,7 +4,6 @@ import {
   Link,
   Links,
   Meta,
-  NavLink,
   Outlet,
   Scripts,
   ScrollRestoration,
@@ -12,6 +11,7 @@ import {
 } from "@remix-run/react";
 import "virtual:uno.css";
 import "@unocss/reset/tailwind-compat.css";
+import "~/global.css";
 import Gutter from "./components/Gutter";
 import { MetaFunction } from "@remix-run/node";
 import { Navigation } from "./components/Navigation";
@@ -19,6 +19,7 @@ import { gqlClient } from "./util/gqlClient";
 import RootQuery from "./gql/RootQuery";
 import { errors } from "./util/errors";
 import Heading from "./components/Heading";
+import MobileMenu from "./components/MobileMenu";
 
 export const loader = async () => {
   const res = await gqlClient().query(RootQuery, {});
@@ -51,7 +52,7 @@ export function ErrorBoundary() {
 
   return (
     <Gutter className="flex flex-1 flex-col">
-      <Heading className="flex flex-1 flex-col justify-center pb-[33%] text-center">
+      <Heading className="flex flex-1 flex-col justify-center items-center pb-[33%] text-center">
         {isRouteErrorResponse(error)
           ? `HTTP ${error.status} - ${error.statusText || error.data}`
           : "Unknown Error"}
@@ -69,26 +70,19 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body className="font-josefin ">
-        <div className="min-h-screen mb-12">
+      <body className="text-base font-josefin bg-bg text-text">
+        <div className="min-h-screen flex flex-col">
           <Gutter size="lg" className="mt-[33px] flex gap-4 justify-between">
             <Link to="/">
               <h1 className="font-josefin text-4xl sm:text-6xl max-w-[11em] uppercase font-normal">
                 Sisterhood of Traveling Feminist Literature
               </h1>
             </Link>
-            <Navigation className="max-sm:hidden text-2xl" />
+            <MobileMenu />
+            <Navigation className="max-sm:hidden text-2xl text-end" />
           </Gutter>
-          <main className="mt-6 sm:mt-12">{children}</main>
+          <main className="mt-6 sm:mt-12 flex-1 flex flex-col">{children}</main>
         </div>
-        <footer className="sm:hidden my-8 text-sm">
-          <Gutter>
-            <Navigation className="flex-row justify-between text-2xl" />
-          </Gutter>
-        </footer>
-        <footer className="bg-gray-200 text-gray-600 font-normal py-1 font-sans text-xs text-right px-2">
-          <NavLink to="/legal">legal notice</NavLink>
-        </footer>
         <ScrollRestoration />
         <Scripts />
       </body>

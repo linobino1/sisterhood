@@ -7,18 +7,21 @@ const linkClassName = ({ isActive }: { isActive: boolean }) =>
   });
 
 export const Navigation: React.FC<{ className?: string }> = ({ className }) => (
-  <nav className={cn("flex flex-col gap-2 text-end", className)}>
-    <NavLink to="/" className={linkClassName}>
+  <nav className={cn("flex flex-col gap-2", className)}>
+    <NavLink
+      to="/"
+      className={({ isActive }) => cn(linkClassName({ isActive }), "sm:hidden")}
+    >
       start
     </NavLink>
     <NavLink to="/about" className={linkClassName}>
       about
     </NavLink>
-    <a
-      className="hover:underline"
-      href="mailto:contact@sisterhoodoftravelingfeministliterature.com"
-    >
+    <NavLink to="/books" className={linkClassName}>
+      books
+    </NavLink>
+    <NavLink to="/contact" className={linkClassName}>
       contact
-    </a>
+    </NavLink>
   </nav>
 );

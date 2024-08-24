@@ -20,15 +20,20 @@ import Heading from "~/components/Heading";
 interface Props {
   nodes: SerializedLexicalNode[];
   disableGutter?: boolean;
+  disableMarginBlock?: boolean;
 }
 
 export function Serialize({
   nodes,
   disableGutter = false,
+  disableMarginBlock = false,
 }: Props): JSX.Element {
   return (
     <Fragment>
       {nodes?.map((node, index): JSX.Element | null => {
+        const thisDisableMarginTop = disableMarginBlock && index === 0;
+        const thisDisableMarginBottom =
+          disableMarginBlock && index === nodes.length - 1;
         if (node.type === "text") {
           let text = (
             <span
@@ -118,7 +123,12 @@ export function Serialize({
           case "paragraph": {
             return (
               <Gutter disable={disableGutter} className={className} key={index}>
-                <p className="my-3 max-w-[700px] leading-snug">
+                <p
+                  className={cn("max-w-[700px]", {
+                    "mt-3": !thisDisableMarginTop,
+                    "mb-3": !thisDisableMarginBottom,
+                  })}
+                >
                   {serializedChildren}
                 </p>
               </Gutter>
@@ -131,7 +141,13 @@ export function Serialize({
                 key={index}
                 className={cn(className, "group")}
               >
-                <Heading level={node.tag.slice(1)} className="my-4">
+                <Heading
+                  level={node.tag.slice(1)}
+                  className={cn({
+                    "mt-0": thisDisableMarginTop,
+                    "mb-0": thisDisableMarginBottom,
+                  })}
+                >
                   {serializedChildren}
                 </Heading>
               </Gutter>
@@ -179,9 +195,19 @@ export function Serialize({
           }
           case "quote": {
             return (
-              <blockquote className={className} key={index}>
-                {serializedChildren}
-              </blockquote>
+              <Gutter disable={disableGutter} className={className} key={index}>
+                <blockquote
+                  className={cn(
+                    "border-l-4 border-stone-300 pl-4 text-gray-500 font-serif leading-relaxed",
+                    {
+                      "mt-6": !thisDisableMarginTop,
+                      "mb-6": !thisDisableMarginBottom,
+                    }
+                  )}
+                >
+                  {serializedChildren}
+                </blockquote>
+              </Gutter>
             );
           }
           case "link": {
@@ -190,14 +216,13 @@ export function Serialize({
               linkType?: "custom" | "internal";
               newTab?: boolean;
               url?: string;
-              appendix?: string;
             } = node.fields;
 
             if (fields.linkType === "custom") {
               return (
                 <Link
                   key={index}
-                  to={fields.url + (fields.appendix || "")}
+                  to={fields.url ?? ""}
                   target={fields.newTab ? 'target="_blank"' : undefined}
                   rel="noopener noreferrer nofollow"
                   className="text-key-500 underline"
@@ -209,7 +234,7 @@ export function Serialize({
               return (
                 <Link
                   key={index}
-                  to={fields.doc.value.url + (fields.appendix || "")}
+                  to={fields.doc.value.url}
                   target={fields.newTab ? "_blank" : undefined}
                   className="text-key-500 underline"
                   prefetch="intent"
@@ -290,6 +315,20 @@ export function Serialize({
                   </figcaption>
                 )}
               </Gutter>
+            );
+
+          case "autolink":
+            console.log(node);
+            return (
+              <Link
+                key={index}
+                to={node.fields.url}
+                target={node.fields.newTab ? 'target="_blank"' : undefined}
+                rel="noopener noreferrer nofollow"
+                className="text-key-500 underline"
+              >
+                {serializedChildren}
+              </Link>
             );
 
           default:

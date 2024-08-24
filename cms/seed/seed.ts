@@ -7,11 +7,15 @@ import { home } from './pages/home'
 import { about } from './pages/about'
 import { legal } from './pages/legal'
 import { site } from './globals/site'
+import { book1 } from './books/book1'
+import { book2 } from './books/book2'
+import { book3 } from './books/book3'
+import { book4 } from './books/book4'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
-const collections: CollectionSlug[] = ['media']
+const collections: CollectionSlug[] = ['media', 'books']
 const globals: GlobalSlug[] = ['site']
 
 export const seed = async (payload: Payload): Promise<void> => {
@@ -42,11 +46,27 @@ export const seed = async (payload: Payload): Promise<void> => {
   ])
 
   payload.logger.info(`— Seeding media...`)
-  const [img] = await Promise.all(
+  const [img, imgBook1, imgBook2, imgBook3, imgBook4] = await Promise.all(
     [
       {
         filePath: 'media/exlibris.svg',
         alt: 'the ex libris',
+      },
+      {
+        filePath: 'media/book1.jpg',
+        alt: 'a book',
+      },
+      {
+        filePath: 'media/book2.jpg',
+        alt: 'a book',
+      },
+      {
+        filePath: 'media/book3.jpg',
+        alt: 'a book',
+      },
+      {
+        filePath: 'media/book4.jpg',
+        alt: 'a book',
       },
     ].map((img) =>
       payload.create({
@@ -85,6 +105,19 @@ export const seed = async (payload: Payload): Promise<void> => {
       image: img.id,
     }),
   })
+
+  payload.logger.info(`— Seeding books...`)
+  const bookImages = [imgBook1, imgBook2, imgBook3, imgBook4]
+  await Promise.all(
+    [book1, book2, book3, book4].map((book, index) =>
+      payload.create({
+        collection: 'books',
+        data: book({
+          image: bookImages[index].id,
+        }),
+      }),
+    ),
+  )
 
   payload.logger.info('Seeded database successfully!')
 }

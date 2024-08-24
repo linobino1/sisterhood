@@ -11,7 +11,9 @@ import { seoPlugin } from '@payloadcms/plugin-seo'
 import { s3Storage } from '@payloadcms/storage-s3'
 import { Home } from './globals/Home'
 import { About } from './globals/About'
+import { Contact } from './globals/Contact'
 import { Legal } from './globals/Legal'
+import { Books } from './collections/Books'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -28,8 +30,8 @@ export default buildConfig({
   },
   cors: [process.env.FRONTEND_URL ?? ''],
   csrf: [process.env.FRONTEND_URL ?? ''],
-  collections: [Users, Media],
-  globals: [Home, About, Legal, Site],
+  collections: [Books, Media, Users],
+  globals: [Home, About, Contact, Legal, Site],
   editor: lexicalEditor({
     features: ({ defaultFeatures }) => [
       ...defaultFeatures,

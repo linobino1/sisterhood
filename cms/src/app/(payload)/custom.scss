@@ -6,11 +6,11 @@
   &.Configuration {
     order: 3;
   }
-  &.Pages {
-    order: 1;
-  }
   &.Media {
     order: 2;
+  }
+  &.Pages {
+    order: 1;
   }
 }
 

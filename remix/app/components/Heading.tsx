@@ -8,9 +8,9 @@ export interface Props extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const sizes = {
-  1: "text-4xl",
-  2: "text-3xl",
-  3: "text-2xl",
+  1: "text-4xl font-semibold mb-8 tracking-tight",
+  2: "text-2xl font-semibold tracking-tight",
+  3: "text-2xl font-semibold tracking-tight",
   4: "",
   5: "",
   6: "",
@@ -26,7 +26,10 @@ const Heading: React.FC<Props> = ({
   const Tag = `h${level}` as ElementType;
   if (!lookLike) lookLike = level;
   return (
-    <Tag {...props} className={twMerge("", sizes[lookLike], props.className)}>
+    <Tag
+      {...props}
+      className={twMerge("mt-4 mb-4", sizes[lookLike], props.className)}
+    >
       {children}
     </Tag>
   );
