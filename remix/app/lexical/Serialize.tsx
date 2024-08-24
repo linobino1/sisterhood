@@ -198,6 +198,7 @@ export function Serialize({
               <Gutter disable={disableGutter} className={className} key={index}>
                 <blockquote
                   className={cn(
+                    "max-w-[700px]",
                     "border-l-4 border-stone-300 pl-4 text-gray-500 font-serif leading-relaxed",
                     {
                       "mt-6": !thisDisableMarginTop,
