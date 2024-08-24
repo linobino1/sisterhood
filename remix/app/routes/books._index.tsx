@@ -36,6 +36,8 @@ export default function Books() {
                   <img
                     src={book.image.url}
                     alt={book.image.alt}
+                    width={book.image.width ?? 300}
+                    height={book.image.height ?? 200}
                     className="w-full h-auto object-cover"
                   />
                 ) : null}

@@ -12,6 +12,8 @@ const BooksQuery = graphql(`
         image {
           url
           alt
+          width
+          height
         }
         article
       }
