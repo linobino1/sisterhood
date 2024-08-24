@@ -25,6 +25,14 @@ export const home = ({ image }: { image: string }): Seed<Home> => ({
           version: 1,
           children: [
             {
+              type: 'inlineBlock',
+
+              fields: {
+                blockType: 'artwork',
+              },
+              version: 1,
+            },
+            {
               type: 'text',
               text: 'The project takes the form of an ',
             },

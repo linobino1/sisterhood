@@ -1,10 +1,9 @@
 import { getPayload } from 'payload'
-import { importConfig } from 'payload/node'
 import { seed } from './seed'
+import config from '../src/payload.config'
 
 const run = async (): Promise<void> => {
-  const awaitedConfig = await importConfig('../src/payload.config.ts')
-  const payload = await getPayload({ config: awaitedConfig })
+  const payload = await getPayload({ config })
 
   await seed(payload)
 }

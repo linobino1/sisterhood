@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import { Fragment } from "react";
 import escapeHTML from "escape-html";
 import {
   IS_BOLD,
@@ -13,9 +13,9 @@ import type { SerializedLexicalNode } from "./types";
 import { Link } from "@remix-run/react";
 import { cn } from "~/util/cn";
 import LexicalContent from "./LexicalContent";
-import { Media } from "@payload-types";
 import Gutter from "~/components/Gutter";
 import Heading from "~/components/Heading";
+import Artwork from "~/components/Artwork";
 
 interface Props {
   nodes: SerializedLexicalNode[];
@@ -254,8 +254,12 @@ export function Serialize({
             );
           }
 
+          case "inlineBlock":
           case "block":
             switch (node.fields.blockType) {
+              case "artwork":
+                return <Artwork key={index} className="sm:hidden" />;
+
               default:
                 return (
                   <p key={index}>
@@ -332,7 +336,7 @@ export function Serialize({
             );
 
           default:
-            return <p key={index}>unimplemented node type {node.type}</p>;
+            return <span key={index}>unimplemented node type {node.type}</span>;
         }
       })}
     </Fragment>
