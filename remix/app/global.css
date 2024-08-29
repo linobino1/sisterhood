@@ -1,3 +1,8 @@
 html {
   -webkit-font-smoothing: antialiased;
 }
+
+.underline {
+  text-underline-offset: 0.15em;
+  text-decoration-thickness: 0.1em;
+}

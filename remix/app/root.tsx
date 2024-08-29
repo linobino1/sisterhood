@@ -9,9 +9,9 @@ import {
   ScrollRestoration,
   useRouteError,
 } from "@remix-run/react";
-import "virtual:uno.css";
-import "@unocss/reset/tailwind-compat.css";
 import "~/global.css";
+import "@unocss/reset/tailwind-compat.css";
+import "virtual:uno.css";
 import Gutter from "./components/Gutter";
 import { MetaFunction } from "@remix-run/node";
 import { Navigation } from "./components/Navigation";
