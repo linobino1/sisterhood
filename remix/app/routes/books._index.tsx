@@ -25,7 +25,7 @@ export default function Books() {
   const navigate = useNavigate();
   return (
     <Gutter size="lg">
-      <h1 className="text-2xl">Books already travelling</h1>
+      <h1 className="text-xl">Books already travelling</h1>
       {books?.length && (
         <ResponsiveMasonry
           columnsCountBreakPoints={{ 0: 1, 700: 3 }}
@@ -51,7 +51,7 @@ export default function Books() {
                     className="w-full h-auto object-cover bg-zinc-200"
                   />
                 ) : null}
-                <div className="py-2.5 sm:px-1">
+                <div className="py-2.5 sm:px-1 bg-white">
                   <h2 className="text-xl font-bold">{book?.title}</h2>
                   <p className="text-sm text-gray-600">{book?.author}</p>
                   {book?.info ? (

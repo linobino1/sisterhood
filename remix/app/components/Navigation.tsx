@@ -8,9 +8,9 @@ const linkClassName = ({
   isActive: boolean;
   isPending: boolean;
 }) =>
-  cn("hover:underline", {
+  cn("hover:underline underline-offset-4 underline-3", {
     underline: isActive || isPending,
-    "font-bold": isPending,
+    "text-contrast": isPending,
   });
 
 export const Navigation: React.FC<{ className?: string }> = ({ className }) => (

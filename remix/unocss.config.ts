@@ -21,6 +21,7 @@ export default defineConfig({
   ],
   theme: {
     colors: {
+      contrast: "#E0331B",
       // version 1
       // bg: "#D3D9F1", // light blue
       // text: "#FF6424", // orange

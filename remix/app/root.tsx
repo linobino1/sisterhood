@@ -20,6 +20,7 @@ import RootQuery from "./gql/RootQuery";
 import { errors } from "./util/errors";
 import Heading from "./components/Heading";
 import MobileMenu from "./components/MobileMenu";
+import SideArtwork from "./components/SideArtwork";
 
 export const loader = async () => {
   const res = await gqlClient().query(RootQuery, {});
@@ -70,7 +71,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body className="text-base font-josefin bg-bg text-text">
+      <body className="text-base font-josefin bg-bg text-text xl:pt-8">
         <div className="min-h-screen flex flex-col">
           <Gutter
             as="header"
@@ -85,7 +86,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <MobileMenu />
             <Navigation className="max-sm:hidden text-2xl text-end" />
           </Gutter>
-          <main className="mt-6 sm:mt-12 flex-1 flex flex-col">{children}</main>
+          <main className="mt-6 sm:mt-12 flex-1 flex flex-col">
+            <SideArtwork>{children}</SideArtwork>
+          </main>
         </div>
         <ScrollRestoration />
         <Scripts />

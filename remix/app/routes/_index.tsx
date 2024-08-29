@@ -1,7 +1,5 @@
 import { json, LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import { useEffect, useRef } from "react";
-import Artwork from "~/components/Artwork";
 import Gutter from "~/components/Gutter";
 import HomeQuery from "~/gql/HomeQuery";
 import LexicalContent from "~/lexical/LexicalContent";
@@ -16,33 +14,18 @@ export const loader = async ({}: LoaderFunctionArgs) => {
   }
 
   return {
-    content: res.data.Home?.content ?? {},
+    content: res.data.Home?.content,
   };
 };
 
-export default function Index() {
+export function LandingPage() {
   const { content } = useLoaderData<typeof loader>();
-  const containerRef = useRef<HTMLDivElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
-
-  // let's limit the container height by the content height (desktop only)
-  useEffect(() => {
-    if (window.innerWidth < 700) {
-      return;
-    }
-    if (containerRef.current && contentRef.current) {
-      containerRef.current.style.maxHeight = `${contentRef.current.clientHeight}px`;
-    }
-  }, [content]);
 
   return (
-    <div ref={containerRef} className="overflow-hidden flex-1 min-h-[85vh]">
-      <Artwork className={"max-sm:hidden"} />
-      <div ref={contentRef}>
-        <Gutter size="lg">
-          <LexicalContent json={content} className="" disableGutter />
-        </Gutter>
-      </div>
-    </div>
+    <Gutter size="lg" className="pb-8">
+      <LexicalContent json={content} className="text-xl" disableGutter />
+    </Gutter>
   );
 }
+
+export default LandingPage;

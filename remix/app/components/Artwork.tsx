@@ -1,20 +1,40 @@
+import { useLocation } from "@remix-run/react";
+import { useEffect, useState } from "react";
 import { cn } from "~/util/cn";
 
 export interface ArtworkProps
-  extends React.ImgHTMLAttributes<HTMLImageElement> {}
+  extends React.ImgHTMLAttributes<HTMLImageElement> {
+  clipText?: boolean;
+}
 
-const img = "/artwork.png";
-const clipPath = "ellipse(31% 44% at 51.5% 48.5%)";
-const shapeOutside = `url('${img}')`;
+const img1 = "/artwork_crop_1.png";
+const img2 = "/artwork_crop_2.png";
+const images = [img1, img2];
 
-const Artwork = ({ className, ...props }: ArtworkProps) => {
+const Artwork = ({ clipText, className, ...props }: ArtworkProps) => {
+  const { pathname } = useLocation();
+  const [index, setIndex] = useState(0);
+
+  // toggle img on navigation
+  useEffect(() => {
+    setIndex((prev) => (prev + 1) % images.length);
+  }, [pathname]);
+
   return (
     <img
       {...props}
-      src={img}
+      src={images[index]}
       alt="Artwork"
-      className={cn("w-full float-right -mr-50%", className)}
-      style={{ clipPath, shapeOutside, shapeMargin: "5px" }}
+      className={cn(
+        "w-[33vh] xl:w-[500px]",
+        { "float-right": clipText, "fixed right-0 -z-10": !clipText },
+        className
+      )}
+      style={{
+        clipPath: `url('${images[index]}')`,
+        shapeOutside: `url('${images[index]}')`,
+        shapeMargin: "5px",
+      }}
     />
   );
 };

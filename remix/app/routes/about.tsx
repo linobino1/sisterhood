@@ -1,10 +1,8 @@
 import { json, LoaderFunctionArgs } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
-import Gutter from "~/components/Gutter";
 import AboutQuery from "~/gql/AboutQuery";
-import LexicalContent from "~/lexical/LexicalContent";
 import { errors } from "~/util/errors";
 import { gqlClient } from "~/util/gqlClient";
+import LandingPage from "./_index";
 
 export const loader = async ({}: LoaderFunctionArgs) => {
   const res = await gqlClient().query(AboutQuery, {});
@@ -18,11 +16,4 @@ export const loader = async ({}: LoaderFunctionArgs) => {
   };
 };
 
-export default function Index() {
-  const { content } = useLoaderData<typeof loader>();
-  return (
-    <Gutter size="lg">
-      <LexicalContent json={content} className="text-xl" disableGutter />
-    </Gutter>
-  );
-}
+export default LandingPage;
