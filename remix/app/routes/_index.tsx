@@ -1,6 +1,5 @@
 import { json, LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import Gutter from "~/components/Gutter";
 import HomeQuery from "~/gql/HomeQuery";
 import LexicalContent from "~/lexical/LexicalContent";
 import { errors } from "~/util/errors";
@@ -21,11 +20,7 @@ export const loader = async ({}: LoaderFunctionArgs) => {
 export function LandingPage() {
   const { content } = useLoaderData<typeof loader>();
 
-  return (
-    <Gutter size="lg" className="pb-8">
-      <LexicalContent json={content} className="text-xl" disableGutter />
-    </Gutter>
-  );
+  return <LexicalContent json={content} className="text-xl" />;
 }
 
 export default LandingPage;

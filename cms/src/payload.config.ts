@@ -76,7 +76,6 @@ export default buildConfig({
       }),
       BlocksFeature({
         blocks: [Artwork],
-        inlineBlocks: [Artwork],
       }),
       FixedToolbarFeature(),
     ],

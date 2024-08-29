@@ -11,7 +11,7 @@ const img1 = "/artwork_crop_1.png";
 const img2 = "/artwork_crop_2.png";
 const images = [img1, img2];
 
-const Artwork = ({ clipText, className, ...props }: ArtworkProps) => {
+const Artwork = ({ clipText = true, className, ...props }: ArtworkProps) => {
   const { pathname } = useLocation();
   const [index, setIndex] = useState(0);
 
