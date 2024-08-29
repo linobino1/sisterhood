@@ -11,9 +11,9 @@
     "typecheck": "tsc"
   },
   "dependencies": {
-    "@remix-run/node": "^2.10.3",
-    "@remix-run/react": "^2.10.3",
-    "@remix-run/serve": "^2.10.3",
+    "@remix-run/node": "^2.11.2",
+    "@remix-run/react": "^2.11.2",
+    "@remix-run/serve": "^2.11.2",
     "@unocss/reset": "^0.61.5",
     "clsx": "^2.1.1",
     "escape-html": "^1.0.3",
@@ -29,7 +29,7 @@
     "urql": "^4.1.0"
   },
   "devDependencies": {
-    "@remix-run/dev": "^2.10.3",
+    "@remix-run/dev": "^2.11.2",
     "@types/escape-html": "^1.0.4",
     "@types/react": "^18.2.20",
     "@types/react-dom": "^18.2.7",
