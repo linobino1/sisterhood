@@ -23,6 +23,8 @@ interface Props {
   disableMarginBlock?: boolean;
 }
 
+const paragraphWidth = "max-w-[700px]";
+
 export function Serialize({
   nodes,
   disableGutter = false,
@@ -124,7 +126,7 @@ export function Serialize({
             return (
               <Gutter disable={disableGutter} className={className} key={index}>
                 <p
-                  className={cn("max-w-[700px]", {
+                  className={cn(paragraphWidth, {
                     "mt-3": !thisDisableMarginTop,
                     "mb-3": !thisDisableMarginBottom,
                   })}
@@ -198,7 +200,7 @@ export function Serialize({
               <Gutter disable={disableGutter} className={className} key={index}>
                 <blockquote
                   className={cn(
-                    "max-w-[700px]",
+                    paragraphWidth,
                     "border-l-4 border-stone-300 pl-4 text-gray-500 font-serif leading-relaxed",
                     {
                       "mt-6": !thisDisableMarginTop,
@@ -279,46 +281,46 @@ export function Serialize({
               ? "video"
               : null;
             return (
-              <Gutter
-                as="figure"
-                key={index}
-                disable={disableGutter || fullscreen}
-                className={cn("relative mb-8 mt-8 sm:mb-12", {
-                  "mt-8 sm:mt-16": fullscreen,
-                  contents: fullscreen && type === "video",
-                })}
-              >
-                {type === "video" ? (
-                  <video
-                    src={media.url}
-                    controls={!fullscreen}
-                    autoPlay={fullscreen}
-                    loop={fullscreen}
-                    muted={fullscreen}
-                    playsInline={fullscreen}
-                    className={cn("w-full", {
-                      "max-w-[600px]": !fullscreen,
-                      "fixed left-0 top-0 -z-10 h-screen w-screen object-cover":
-                        fullscreen,
-                    })}
-                  />
-                ) : type === "image" ? (
-                  <img src={media.url} alt={media.alt} />
-                ) : (
-                  <p>invalid MIME type {media?.mimeType}</p>
-                )}
-                {caption && (
-                  <figcaption
-                    className={cn(
-                      "text-trans-900 mt-1 text-base leading-snug max-sm:pr-[20%] sm:mt-2",
-                      {
-                        hidden: fullscreen && type === "video",
-                      }
-                    )}
-                  >
-                    <LexicalContent json={caption} disableGutter />
-                  </figcaption>
-                )}
+              <Gutter key={index} disable={disableGutter || fullscreen}>
+                <figure
+                  className={cn("relative mb-8 mt-8 sm:mb-12", {
+                    [paragraphWidth]: !fullscreen,
+                    "mt-8 sm:mt-16": fullscreen,
+                    contents: fullscreen && type === "video",
+                  })}
+                >
+                  {type === "video" ? (
+                    <video
+                      src={media.url}
+                      controls={!fullscreen}
+                      autoPlay={fullscreen}
+                      loop={fullscreen}
+                      muted={fullscreen}
+                      playsInline={fullscreen}
+                      className={cn("w-full", {
+                        "max-w-[600px]": !fullscreen,
+                        "fixed left-0 top-0 -z-10 h-screen w-screen object-cover":
+                          fullscreen,
+                      })}
+                    />
+                  ) : type === "image" ? (
+                    <img src={media.url} alt={media.alt} />
+                  ) : (
+                    <p>invalid MIME type {media?.mimeType}</p>
+                  )}
+                  {caption && (
+                    <figcaption
+                      className={cn(
+                        "text-trans-900 mt-1 text-base leading-snug max-sm:pr-[20%] sm:mt-2",
+                        {
+                          hidden: fullscreen && type === "video",
+                        }
+                      )}
+                    >
+                      <LexicalContent json={caption} disableGutter />
+                    </figcaption>
+                  )}
+                </figure>
               </Gutter>
             );
 
