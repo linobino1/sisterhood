@@ -36,7 +36,7 @@ const Artwork = ({ clipText = true, className, ...props }: ArtworkProps) => {
         className,
       )}
       style={{
-        clipPath: `url('${images[index]}')`,
+        clipPath: clipText ? `url('${images[index]}')` : 'none',
         shapeOutside: `url('${images[index]}')`,
         shapeMargin: '5px',
       }}
