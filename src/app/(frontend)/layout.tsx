@@ -16,7 +16,7 @@ export const fetchSite = cache(async () => {
   return payload.findGlobal({ slug: 'site', depth: 1 })
 })
 
-export async function generateMetadata({ params: { slug = 'home' } }): Promise<Metadata> {
+export async function generateMetadata(): Promise<Metadata> {
   const site = await fetchSite()
 
   return {
