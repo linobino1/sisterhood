@@ -26,7 +26,7 @@ const Artwork = ({ clipText = true, className, ...props }: ArtworkProps) => {
       src={images[index]}
       alt="Artwork"
       className={cn(
-        "w-[33vh] lg:w-[400px] xl:w-[450px] 2xl:w-[500px]",
+        "w-[33vh] max-sm:max-w-[50vw] lg:w-[400px] xl:w-[450px] 2xl:w-[500px]",
         { "float-right": clipText, "fixed right-0 -z-10": !clipText },
         className
       )}
